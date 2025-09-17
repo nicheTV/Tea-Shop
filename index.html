@@ -5,26 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Island Roots Naturals</title>
   <style>
+    /* --- Body & Video --- */
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #fafafa;
-      color: #222;
+      color: white;
+      height: 200vh; /* allow scrolling */
+      overflow-x: hidden;
+      background: #000; /* fallback for video */
     }
+    .video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+    }
+    .video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* --- Header --- */
     header {
       text-align: center;
       padding: 2rem;
-      background: linear-gradient(135deg, #1e5631, #a4de02);
+      background: rgba(30, 86, 49, 0.6); /* semi-transparent over video */
       color: white;
+      position: relative;
+      z-index: 1;
     }
-    header h1 {
-      font-size: 2.5rem;
-      margin: 0;
-    }
-    header p {
-      font-size: 1.2rem;
-      margin: 0.5rem 0 0;
-    }
+    header h1 { font-size: 2.5rem; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
+    header p { font-size: 1.2rem; margin: 0.5rem 0 0; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
+
+    /* --- Store --- */
     .store {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -32,38 +49,28 @@
       padding: 2rem;
       max-width: 1200px;
       margin: auto;
+      position: relative;
+      z-index: 1;
     }
     .product {
-      background: white;
+      background: transparent; /* fully transparent */
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      overflow: hidden;
+      overflow: visible;
       text-align: center;
       transition: transform 0.2s ease;
     }
-    .product:hover {
-      transform: scale(1.03);
+    .product:hover { transform: scale(1.03); }
+    .product img { width: 100%; height: 200px; object-fit: cover; }
+    .product h2, .product p, .price {
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
     }
-    .product img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-    .product h2 {
-      font-size: 1.2rem;
-      margin: 0.8rem 0 0.2rem;
-    }
-    .product p {
-      font-size: 0.9rem;
-      color: #555;
-      padding: 0 1rem;
-      min-height: 40px;
-    }
+
     .price {
       font-size: 1.1rem;
       font-weight: bold;
       margin: 0.5rem 0;
     }
+
     .btn {
       display: inline-block;
       background: #1e5631;
@@ -73,38 +80,85 @@
       border-radius: 8px;
       text-decoration: none;
       transition: background 0.3s ease;
+      position: relative;
+      z-index: 2; /* ensures button stays above video */
     }
-    .btn:hover {
-      background: #145022;
-    }
+    .btn:hover { background: #145022; }
+
+    /* --- Footer --- */
     footer {
       text-align: center;
       padding: 1.5rem;
-      background: #222;
-      color: white;
+      background: rgba(34,34,34,0.7);
       margin-top: 2rem;
+      position: relative;
+      z-index: 1;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
     }
   </style>
 </head>
 <body>
+  <!-- Video Container -->
+  <div class="video-container">
+    <video id="bgVideo" preload="auto" muted playsinline>
+      <source src="videos/your-video.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Header -->
   <header>
     <h1>Island Roots Naturals</h1>
     <p>Nature’s Gift. Every Season.</p>
   </header>
 
+  <!-- Store -->
   <section class="store">
     <!-- Product 1 -->
     <div class="product">
-      <img src="your-soursop-image.jpg" alt="Soursop Tea Leaves Pouch">
+      <img src="images/your-soursop-image.png" alt="Soursop Tea Leaves Pouch">
       <h2>Soursop Tea Leaves</h2>
       <p>Hand-picked and naturally cured leaves in a resealable pouch.</p>
       <div class="price">$14.99</div>
       <a href="#" class="btn">Buy Now</a>
     </div>
 
-    <!-- Placeholder products -->
+    <!-- Product 2 -->
     <div class="product">
-      <img src="placeholder.jpg" alt="Coming Soon">
+      <img src="images/placeholder.png" alt="Coming Soon">
+      <h2>Coming Soon</h2>
+      <p>New herbal product arriving shortly.</p>
+      <div class="price">—</div>
+      <a href="#" class="btn">Notify Me</a>
+    </div>
+
+    <!-- Product 3 -->
+    <div class="product">
+      <img src="images/placeholder.png" alt="Coming Soon">
+      <h2>Coming Soon</h2>
+      <p>Another natural addition in the works.</p>
+      <div class="price">—</div>
+      <a href="#" class="btn">Notify Me</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Island Roots Naturals. All rights reserved.</p>
+  </footer>
+
+  <!-- Scroll Video Script -->
+  <script>
+    const video = document.getElementById('bgVideo');
+    window.addEventListener('scroll', () => {
+      let scrollTop = window.scrollY;
+      let docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      let scrollFraction = scrollTop / docHeight;
+      video.currentTime = video.duration * scrollFraction;
+    });
+  </script>
+</body>
+</html>      <img src="placeholder.jpg" alt="Coming Soon">
       <h2>Coming Soon</h2>
       <p>New herbal product arriving shortly.</p>
       <div class="price">—</div>
