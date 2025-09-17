@@ -10,9 +10,9 @@
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
-      height: 200vh; /* allow scrolling */
+      height: 200vh; /* enough space to scroll through 6 products */
       overflow-x: hidden;
-      background: #000; /* fallback for video */
+      background: #000; /* fallback if video doesn’t load */
     }
     .video-container {
       position: fixed;
@@ -33,7 +33,7 @@
     header {
       text-align: center;
       padding: 2rem;
-      background: rgba(30, 86, 49, 0.6); /* semi-transparent over video */
+      background: rgba(30, 86, 49, 0.6);
       color: white;
       position: relative;
       z-index: 1;
@@ -41,7 +41,7 @@
     header h1 { font-size: 2.5rem; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
     header p { font-size: 1.2rem; margin: 0.5rem 0 0; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
 
-    /* --- Store --- */
+    /* --- Store Grid --- */
     .store {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -53,24 +53,23 @@
       z-index: 1;
     }
     .product {
-      background: transparent; /* fully transparent */
+      background: transparent;
       border-radius: 12px;
-      overflow: visible;
       text-align: center;
       transition: transform 0.2s ease;
     }
     .product:hover { transform: scale(1.03); }
-    .product img { width: 100%; height: 200px; object-fit: cover; }
+    .product img { width: 100%; height: 200px; object-fit: contain; }
     .product h2, .product p, .price {
       text-shadow: 0 2px 4px rgba(0,0,0,0.6);
     }
-
     .price {
       font-size: 1.1rem;
       font-weight: bold;
       margin: 0.5rem 0;
     }
 
+    /* --- Buttons --- */
     .btn {
       display: inline-block;
       background: #1e5631;
@@ -81,7 +80,7 @@
       text-decoration: none;
       transition: background 0.3s ease;
       position: relative;
-      z-index: 2; /* ensures button stays above video */
+      z-index: 2;
     }
     .btn:hover { background: #145022; }
 
@@ -99,7 +98,7 @@
   </style>
 </head>
 <body>
-  <!-- Video Container -->
+  <!-- Video Background -->
   <div class="video-container">
     <video id="bgVideo" preload="auto" muted playsinline>
       <source src="videos/your-video.mp4" type="video/mp4">
@@ -114,7 +113,7 @@
 
   <!-- Store -->
   <section class="store">
-    <!-- Product 1 -->
+    <!-- Product 1 (Available) -->
     <div class="product">
       <img src="images/your-soursop-image.png" alt="Soursop Tea Leaves Pouch">
       <h2>Soursop Tea Leaves</h2>
@@ -123,7 +122,7 @@
       <a href="#" class="btn">Buy Now</a>
     </div>
 
-    <!-- Product 2 -->
+    <!-- 5 Placeholder Products -->
     <div class="product">
       <img src="images/placeholder.png" alt="Coming Soon">
       <h2>Coming Soon</h2>
@@ -131,12 +130,31 @@
       <div class="price">—</div>
       <a href="#" class="btn">Notify Me</a>
     </div>
-
-    <!-- Product 3 -->
     <div class="product">
       <img src="images/placeholder.png" alt="Coming Soon">
       <h2>Coming Soon</h2>
       <p>Another natural addition in the works.</p>
+      <div class="price">—</div>
+      <a href="#" class="btn">Notify Me</a>
+    </div>
+    <div class="product">
+      <img src="images/placeholder.png" alt="Coming Soon">
+      <h2>Coming Soon</h2>
+      <p>Stay tuned for our next herbal treasure.</p>
+      <div class="price">—</div>
+      <a href="#" class="btn">Notify Me</a>
+    </div>
+    <div class="product">
+      <img src="images/placeholder.png" alt="Coming Soon">
+      <h2>Coming Soon</h2>
+      <p>New blends are being prepared.</p>
+      <div class="price">—</div>
+      <a href="#" class="btn">Notify Me</a>
+    </div>
+    <div class="product">
+      <img src="images/placeholder.png" alt="Coming Soon">
+      <h2>Coming Soon</h2>
+      <p>Another product grown by nature’s hand.</p>
       <div class="price">—</div>
       <a href="#" class="btn">Notify Me</a>
     </div>
@@ -147,14 +165,27 @@
     <p>&copy; 2025 Island Roots Naturals. All rights reserved.</p>
   </footer>
 
-  <!-- Scroll Video Script -->
+  <!-- Smooth Scroll Video Script -->
   <script>
     const video = document.getElementById('bgVideo');
-    window.addEventListener('scroll', () => {
+
+    function smoothScrollVideo() {
       let scrollTop = window.scrollY;
       let docHeight = document.documentElement.scrollHeight - window.innerHeight;
       let scrollFraction = scrollTop / docHeight;
-      video.currentTime = video.duration * scrollFraction;
+
+      // Map scroll fraction to video duration
+      if (video.duration) {
+        let targetTime = video.duration * scrollFraction;
+        // Smooth transition
+        video.currentTime += (targetTime - video.currentTime) * 0.1;
+      }
+      requestAnimationFrame(smoothScrollVideo);
+    }
+
+    // Start animation loop once video metadata is loaded
+    video.addEventListener('loadedmetadata', () => {
+      requestAnimationFrame(smoothScrollVideo);
     });
   </script>
 </body>
