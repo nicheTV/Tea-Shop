@@ -10,9 +10,9 @@
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: white;
-      height: 200vh; /* enough space to scroll through 6 products */
+      height: 200vh; /* page scroll length */
       overflow-x: hidden;
-      background: #000; /* fallback if video doesn’t load */
+      background: #000; /* fallback */
     }
     .video-container {
       position: fixed;
@@ -68,8 +68,6 @@
       font-weight: bold;
       margin: 0.5rem 0;
     }
-
-    /* --- Buttons --- */
     .btn {
       display: inline-block;
       background: #1e5631;
@@ -98,7 +96,7 @@
   </style>
 </head>
 <body>
-  <!-- Video Background -->
+  <!-- Video Container -->
   <div class="video-container">
     <video id="bgVideo" preload="auto" muted playsinline>
       <source src="videos/your-video.mp4" type="video/mp4">
@@ -122,7 +120,7 @@
       <a href="#" class="btn">Buy Now</a>
     </div>
 
-    <!-- 5 Placeholder Products -->
+    <!-- Product 2–6 (Coming Soon) -->
     <div class="product">
       <img src="images/placeholder.png" alt="Coming Soon">
       <h2>Coming Soon</h2>
@@ -130,6 +128,7 @@
       <div class="price">—</div>
       <a href="#" class="btn">Notify Me</a>
     </div>
+
     <div class="product">
       <img src="images/placeholder.png" alt="Coming Soon">
       <h2>Coming Soon</h2>
@@ -137,6 +136,7 @@
       <div class="price">—</div>
       <a href="#" class="btn">Notify Me</a>
     </div>
+
     <div class="product">
       <img src="images/placeholder.png" alt="Coming Soon">
       <h2>Coming Soon</h2>
@@ -144,6 +144,7 @@
       <div class="price">—</div>
       <a href="#" class="btn">Notify Me</a>
     </div>
+
     <div class="product">
       <img src="images/placeholder.png" alt="Coming Soon">
       <h2>Coming Soon</h2>
@@ -151,6 +152,7 @@
       <div class="price">—</div>
       <a href="#" class="btn">Notify Me</a>
     </div>
+
     <div class="product">
       <img src="images/placeholder.png" alt="Coming Soon">
       <h2>Coming Soon</h2>
@@ -168,25 +170,22 @@
   <!-- Smooth Scroll Video Script -->
   <script>
     const video = document.getElementById('bgVideo');
+    let scrollFraction = 0;
 
-    function smoothScrollVideo() {
-      let scrollTop = window.scrollY;
-      let docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      let scrollFraction = scrollTop / docHeight;
-
-      // Map scroll fraction to video duration
+    function syncVideo() {
       if (video.duration) {
-        let targetTime = video.duration * scrollFraction;
-        // Smooth transition
-        video.currentTime += (targetTime - video.currentTime) * 0.1;
+        video.currentTime = video.duration * scrollFraction;
       }
-      requestAnimationFrame(smoothScrollVideo);
+      requestAnimationFrame(syncVideo);
     }
 
-    // Start animation loop once video metadata is loaded
-    video.addEventListener('loadedmetadata', () => {
-      requestAnimationFrame(smoothScrollVideo);
+    window.addEventListener('scroll', () => {
+      let scrollTop = window.scrollY;
+      let docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      scrollFraction = scrollTop / docHeight;
     });
+
+    requestAnimationFrame(syncVideo);
   </script>
 </body>
 </html>
